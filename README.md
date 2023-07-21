@@ -43,7 +43,7 @@ To get a local copy up and running follow these simple example steps.
 1. Ensure you have Python v3.11 installed on your machine.
 2. Clone the repository, the project does not rely on any external python libraries, meaning no libraries are required to be installed before getting started.
 
-##  ```Warning,``` the interpreter is nowhere near ready to be used, many bugs currently exist, as it's very early into development.
+##  ```Warning``` the interpreter is nowhere near ready to be used, many bugs currently exist, as it's very early into development.
 
 
 ### Using the Interpreter
