@@ -1,0 +1,2 @@
+let name = "MSPL";
+print("Welcome to " + name + "Programming Language");
