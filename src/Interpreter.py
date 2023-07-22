@@ -1,5 +1,10 @@
 import Parser
 import Lexxer
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
+
+colorama_init()
 
 class Interpreter():
     def __init__(self, Nodes) -> None:
@@ -11,14 +16,21 @@ class Interpreter():
         self.CurrentNodeIndex += 1
         if self.CurrentNodeIndex < len(self.Nodes):
             self.CurrentNode = self.Nodes[self.CurrentNodeIndex]
+    def ThrowError(self, ErrorMessage):
+        print(f"{Fore.RED}{Style.BRIGHT}Halting program as error was thrown!")
+        print(f"{Fore.RED}Error {Style.RESET_ALL}: {Fore.YELLOW}" + ErrorMessage)
+        print(Style.RESET_ALL)
+        exit()
 
     def EvaluateExpression(self, expression):
-        
 
         for Index, Token in enumerate(expression):
             if Token.Type == Lexxer.TOKEN_TYPE.MISC:
-                expression[Index] = self.Variables[Token.Value]
-                
+                try:
+                    expression[Index] = self.Variables[Token.Value]
+                except:
+                    self.ThrowError(f"No such variable with name {Fore.WHITE}" + Token.Value)
+
         while len(expression) != 1:
             for Index, Token in enumerate(expression):
                 if Token.Type == Lexxer.TOKEN_TYPE.ADDITION:
@@ -26,7 +38,7 @@ class Interpreter():
                     RightSide = expression[Index + 1]
 
                     if LeftSide.Type != RightSide.Type:
-                        print("Arithmetic on Mismatched types!")
+                        self.ThrowError("Arithmetic on mismatched types!")
 
                     EvaluatedValue = LeftSide.Value + RightSide.Value
 
@@ -34,7 +46,45 @@ class Interpreter():
 
                     expression.remove(LeftSide)
                     expression.remove(RightSide)
+                if Token.Type == Lexxer.TOKEN_TYPE.SUBTRACTION:
+                    LeftSide = expression[Index - 1]
+                    RightSide = expression[Index + 1]
 
+                    if LeftSide.Type != RightSide.Type:
+                        self.ThrowError("Arithmetic on mismatched types!")
+
+                    EvaluatedValue = LeftSide.Value - RightSide.Value
+
+                    expression[Index] = Lexxer.Token(EvaluatedValue, LeftSide.Type)
+
+                    expression.remove(LeftSide)
+                    expression.remove(RightSide)
+                if Token.Type == Lexxer.TOKEN_TYPE.MULTIPLICATION:
+                    LeftSide = expression[Index - 1]
+                    RightSide = expression[Index + 1]
+
+                    if LeftSide.Type != RightSide.Type:
+                        self.ThrowError("Arithmetic on mismatched types!")
+
+                    EvaluatedValue = LeftSide.Value * RightSide.Value
+
+                    expression[Index] = Lexxer.Token(EvaluatedValue, LeftSide.Type)
+
+                    expression.remove(LeftSide)
+                    expression.remove(RightSide)
+                if Token.Type == Lexxer.TOKEN_TYPE.DIVISION:
+                    LeftSide = expression[Index - 1]
+                    RightSide = expression[Index + 1]
+
+                    if LeftSide.Type != RightSide.Type:
+                        self.ThrowError("Arithmetic on mismatched types!")
+
+                    EvaluatedValue = LeftSide.Value / RightSide.Value
+
+                    expression[Index] = Lexxer.Token(EvaluatedValue, LeftSide.Type)
+
+                    expression.remove(LeftSide)
+                    expression.remove(RightSide)
         
         return expression[0]
     

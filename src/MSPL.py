@@ -2,7 +2,7 @@ import Lexxer as MSPL_Lexxer
 import Parser as MSPL_Parser
 import Interpreter as MSPL_Interpreter
 
-TestCase = "Addition"
+TestCase = "FeatureTesting"
 
 print("\nTokenizer: Start\n")
 Tokens = MSPL_Lexxer.Tokenize([line.strip() for line in open("tests/{}.mspl".format(TestCase), 'r')])
