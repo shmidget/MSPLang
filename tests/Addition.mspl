@@ -1,0 +1,7 @@
+let Number_One = 13;
+let Number_Two = 12;
+let Sum = Number_One + Number_Two;
+print("Sum Should Be:");
+print(Number_One + Number_Two);
+print("Sum Was:");
+print(Sum);

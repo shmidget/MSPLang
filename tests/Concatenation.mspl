@@ -1,0 +1,2 @@
+let String = "Example" + " " + "of" + " " + "Concatenation";
+print(String);

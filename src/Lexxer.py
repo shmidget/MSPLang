@@ -1,4 +1,6 @@
 
+DIGITS = list("1234567890.")
+
 class TOKEN_TYPE():
     STRING = "STR"
     NUMBER = "NUM"
@@ -10,6 +12,7 @@ class TOKEN_TYPE():
     LBRACE = "LBRACE"
     RBRACE = "BRACE"
     NEW_LINE = "NL"
+    DOT = "DOT"
 
 SYNTAX = {
     "print": TOKEN_TYPE.PRINT,
@@ -31,6 +34,7 @@ class Token():
         self.Type = Type
     def __repr__(self) -> str:
         return "(TOKEN: {}, {})".format(self.Type, self.Value)
+
 
 class Lexxer():
     def __init__(self, FileContent) -> None:
@@ -71,6 +75,24 @@ class Lexxer():
         self.AdvanceCharacter()
         self.GeneratedTokens.append(Token(String, TOKEN_TYPE.STRING))
 
+    def ProduceNumber(self):
+        Number = ""
+
+        while self.CurrentCharacter in DIGITS and self.CurrentCharacterIndex < len(self.CurrentLine):
+            Number += self.CurrentCharacter
+            self.AdvanceCharacter()
+
+        self.AdvanceCharacter()
+
+        if Number == ".":
+            self.GeneratedTokens.append(Token(".", TOKEN_TYPE.DOT))
+            return
+
+        if Number.count(".") > 1:
+            self.GeneratedTokens.append(Token(Number, TOKEN_TYPE.MISC))
+            return
+        
+        self.GeneratedTokens.append(Token(float(Number), TOKEN_TYPE.NUMBER))
 
     def LexicalAnalysis(self):
         self.AdvanceLine()
@@ -93,6 +115,10 @@ class Lexxer():
                 elif self.CurrentCharacter == "\"":
                     self.CheckExtraCharacters()
                     self.ProduceString()
+                elif self.CurrentCharacter in DIGITS:
+                    self.CheckExtraCharacters()
+                    self.ProduceNumber()
+
                 else: 
                     self.ExtraCharacters += self.CurrentCharacter
 

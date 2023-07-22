@@ -1,3 +1,2 @@
-let FirstName = "Draco";
-let LastName = "rah";
-print(FirstName + LastName);
+let String = "Hello World";
+print(String);

@@ -3,7 +3,7 @@ Done => ✅
 Currently Doing => ⌨️
 Havent Started => ❌
 
-Add Numeric Literals: [⌨️]
+Add Numeric Literals: [✅]
 Add Conditional Statements: [❌]
 Add Input Function: [❌]
 Add Loops: [❌]
