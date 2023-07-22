@@ -10,3 +10,9 @@ if (foo == "bar") {
 while (true) {
     print("Infinite loop");
 }
+
+
+fn Sum (Bar,Baz) {
+    let value = Bar + Baz;
+    return value;
+}
