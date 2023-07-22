@@ -3,6 +3,9 @@ import Lexxer
 class NodeType():
     VARIABLE_NODE = 0
     PRINT_NODE = 1
+    CONDITIONAL_NODE = 2
+    INCREMENT_SCOPE = 3
+    DECREMENT_SCOPE = 4
 
 class PrintNode():
     def __init__(self, NodeType, Expression) -> None:
@@ -20,7 +23,26 @@ class VariableNode():
         self.Expression = Expression
     def __repr__(self) -> str:
         return "(NODE: {}, {} {})".format("VARIABLE", self.Name, self.Expression)
+    
+class ConditionalNode():
+    def __init__(self, NodeType, Expression) -> None:
+        self.NodeType = NodeType
 
+        self.Expression = Expression
+    def __repr__(self) -> str:
+        return "(NODE: {} {})".format("CONDITION", self.Expression)
+
+class IncrementScope():
+    def __init__(self, NodeType) -> None:
+        self.NodeType = NodeType
+    def __repr__(self) -> str:
+        return "(NODE: {})".format("INCREMENT-SCOPE")
+
+class DecrementScope():
+    def __init__(self, NodeType) -> None:
+        self.NodeType = NodeType
+    def __repr__(self) -> str:
+        return "(NODE: {})".format("DECREMENT-SCOPE")
 
 class Parser():
     def __init__(self, Tokens) -> None:
@@ -41,7 +63,7 @@ class Parser():
         
         self.AdvanceToken()
 
-        if self.CurrentToken.Type != Lexxer.TOKEN_TYPE.LBRACE:
+        if self.CurrentToken.Type != Lexxer.TOKEN_TYPE.LPAREN:
             print("Missing LBracket.")
             return
         
@@ -49,11 +71,32 @@ class Parser():
         
         Expression = []
 
-        while self.CurrentToken.Type != Lexxer.TOKEN_TYPE.RBRACE:
+        while self.CurrentToken.Type != Lexxer.TOKEN_TYPE.RPAREN:
             Expression.append(self.CurrentToken)
             self.AdvanceToken()
 
         self.ast.append(PrintNode(NodeType.PRINT_NODE, Expression))
+
+    def ConditionalRule(self):
+        
+        if self.CurrentToken.Type != Lexxer.TOKEN_TYPE.CONDITIONAL:
+            return
+        
+        self.AdvanceToken()
+
+        if self.CurrentToken.Type != Lexxer.TOKEN_TYPE.LPAREN:
+            print("Missing LBracket.")
+            return
+        
+        self.AdvanceToken()
+        
+        Expression = []
+
+        while self.CurrentToken.Type != Lexxer.TOKEN_TYPE.RPAREN:
+            Expression.append(self.CurrentToken)
+            self.AdvanceToken()
+
+        self.ast.append(ConditionalNode(NodeType.CONDITIONAL_NODE, Expression))
 
     def AssignmentRule(self):
         if self.CurrentToken.Type != Lexxer.TOKEN_TYPE.VARIABLE:
@@ -83,6 +126,19 @@ class Parser():
 
         self.ast.append(VariableNode(NodeType.VARIABLE_NODE, VariableName, Expression))
         
+    def ScopeRule(self):
+        if self.CurrentToken.Type != Lexxer.TOKEN_TYPE.LBRACE and self.CurrentToken.Type != Lexxer.TOKEN_TYPE.RBRACE:
+            return
+        
+        if self.CurrentToken.Type == Lexxer.TOKEN_TYPE.LBRACE:
+            print("done")
+            self.ast.append(IncrementScope(NodeType.INCREMENT_SCOPE))
+            self.AdvanceToken()
+        if self.CurrentToken.Type == Lexxer.TOKEN_TYPE.RBRACE:
+            self.ast.append(DecrementScope(NodeType.DECREMENT_SCOPE))
+            self.AdvanceToken()
+        self.AdvanceToken()
+
 
     def GenerateAST(self):
         self.AdvanceToken()
@@ -92,17 +148,17 @@ class Parser():
         while self.CurrentTokenIndex < len(self.Tokens):
             
             # Rules #
-
             self.PrintRule()
             self.AssignmentRule()
-
+            self.ConditionalRule()
+            self.ScopeRule()
             self.AdvanceToken()
 
     
-        print("Now displaying all tokens:")
+        print("Now displaying all Nodes:")
         for Node in self.ast:
             print(Node)
-        print("Finished displaying all tokens")
+        print("Finished displaying all Nodes")
 
         return self.ast
         

@@ -1,0 +1,10 @@
+let Example = "Foo";
+
+let ExampleTwo = "Bar";
+
+if (Example == "Foo") {
+    print("First");
+    if (ExampleTwo == "Bar") {
+        print("Second");
+    }
+}
