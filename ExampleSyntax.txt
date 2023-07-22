@@ -1,0 +1,12 @@
+let FirstName = "Draco";
+let LastName = "rah";
+print(FirstName + LastName);
+
+let foo = "bar";
+if (foo == "bar") {
+    print("baz");
+}
+
+while (true) {
+    print("Infinite loop");
+}
