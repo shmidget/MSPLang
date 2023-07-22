@@ -13,31 +13,22 @@ class TOKEN_TYPE():
     MULTIPLICATION = "MUL"
     MISC = "MISC"
     LBRACE = "LBRACE"
-    RBRACE = "RBRACE"
-    LPAREN = "LPAREN"
-    RPAREN = "RPAREN"
+    RBRACE = "BRACE"
     NEW_LINE = "NL"
     DOT = "DOT"
     CONCATENATION = "CONCAT"
-    CONDITIONAL = "IF"
-    COMPARISON = "COMPARE"
-    BOOLEAN = "BOOL"
 
 SYNTAX = {
     "print": TOKEN_TYPE.PRINT,
-    "if": TOKEN_TYPE.CONDITIONAL,
-    "let": TOKEN_TYPE.VARIABLE,
+    "let": TOKEN_TYPE.VARIABLE
 }
 
 CHARACTERS = {
     "=": TOKEN_TYPE.ASSIGNMENT,
     ";": TOKEN_TYPE.NEW_LINE,
-    "(": TOKEN_TYPE.LPAREN,
-    ")": TOKEN_TYPE.RPAREN,
-    "{": TOKEN_TYPE.LBRACE,
-    "}": TOKEN_TYPE.RBRACE,
+    "(": TOKEN_TYPE.LBRACE,
+    ")": TOKEN_TYPE.RBRACE,
     ",": TOKEN_TYPE.CONCATENATION,
-    
 
     "+": TOKEN_TYPE.ADDITION,
     "-": TOKEN_TYPE.SUBTRACTION,
@@ -150,11 +141,6 @@ class Lexxer():
             self.ExtraCharacters = ""
             self.GeneratedTokens.append(Token("", TOKEN_TYPE.NEW_LINE))
             self.AdvanceLine()
-
-        for Index,Tokens in enumerate(self.GeneratedTokens):
-            if Tokens.Type == TOKEN_TYPE.ASSIGNMENT and self.GeneratedTokens[Index+1].Type == TOKEN_TYPE.ASSIGNMENT:
-                self.GeneratedTokens[Index] = Token("==", TOKEN_TYPE.COMPARISON)
-                self.GeneratedTokens.remove(self.GeneratedTokens[Index + 1])
 
         print("Now displaying all generated tokens:")
         for Tokens in self.GeneratedTokens:

@@ -100,16 +100,6 @@ class Interpreter():
 
                     expression.remove(LeftSide)
                     expression.remove(RightSide)
-                if Token.Type == Lexxer.TOKEN_TYPE.COMPARISON:
-                    LeftSide = expression[Index - 1]
-                    RightSide = expression[Index + 1]
-
-                    EvaluatedValue = LeftSide.Value == RightSide.Value
-
-                    expression[Index] = Lexxer.Token(EvaluatedValue, Lexxer.TOKEN_TYPE.BOOLEAN)
-
-                    expression.remove(LeftSide)
-                    expression.remove(RightSide)
         
         return expression[0]
     
@@ -132,18 +122,6 @@ class Interpreter():
 
         print(EvaluatedExpression.Value)
 
-    def HandleConditional(self):
-        if self.CurrentNode.NodeType != Parser.NodeType.CONDITIONAL_NODE:
-            return   
-        Condition = self.CurrentNode.Expression
-        EvaluatedCondition = self.EvaluateExpression(Condition)
-        self.AdvanceNode()
-        if self.CurrentNode.NodeType != Parser.NodeType.INCREMENT_SCOPE:
-            return
-        
-        if EvaluatedCondition.Value == False:
-            while self.CurrentNode.NodeType != Parser.NodeType.DECREMENT_SCOPE:
-                self.AdvanceNode()
 
     def Evaluate(self):
         
@@ -153,7 +131,6 @@ class Interpreter():
             
             self.HandleAssignment()
             self.HandlePrintStatement()
-            self.HandleConditional()
 
             self.AdvanceNode()
         
