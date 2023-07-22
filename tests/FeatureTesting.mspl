@@ -1,1 +1,2 @@
-print(Test);
+let Test = 12;
+print(Test + 1);

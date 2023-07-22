@@ -88,8 +88,6 @@ class Lexxer():
             Number += self.CurrentCharacter
             self.AdvanceCharacter()
 
-        self.AdvanceCharacter()
-
         if Number == ".":
             self.GeneratedTokens.append(Token(".", TOKEN_TYPE.DOT))
             return
