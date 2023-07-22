@@ -18,21 +18,22 @@ class Interpreter():
         for Index, Token in enumerate(expression):
             if Token.Type == Lexxer.TOKEN_TYPE.MISC:
                 expression[Index] = self.Variables[Token.Value]
+                
+        while len(expression) != 1:
+            for Index, Token in enumerate(expression):
+                if Token.Type == Lexxer.TOKEN_TYPE.ADDITION:
+                    LeftSide = expression[Index - 1]
+                    RightSide = expression[Index + 1]
 
-        for Index, Token in enumerate(expression):
-            if Token.Type == Lexxer.TOKEN_TYPE.ADDITION:
-                LeftSide = expression[Index - 1]
-                RightSide = expression[Index + 1]
+                    if LeftSide.Type != RightSide.Type:
+                        print("Arithmetic on Mismatched types!")
 
-                if LeftSide.Type != RightSide.Type:
-                    print("Arithmetic on Mismatched types!")
+                    EvaluatedValue = LeftSide.Value + RightSide.Value
 
-                EvaluatedValue = LeftSide.Value + RightSide.Value
+                    expression[Index] = Lexxer.Token(EvaluatedValue, LeftSide.Type)
 
-                expression[Index] = Lexxer.Token(EvaluatedValue, LeftSide.Type)
-
-                expression.remove(LeftSide)
-                expression.remove(RightSide)
+                    expression.remove(LeftSide)
+                    expression.remove(RightSide)
 
         
         return expression[0]
