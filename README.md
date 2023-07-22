@@ -64,7 +64,7 @@ To get a local copy up and running follow these simple example steps.
 
    ```
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the ```tests``` directory._
 
 
 
