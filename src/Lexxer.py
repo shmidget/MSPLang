@@ -16,6 +16,7 @@ class TOKEN_TYPE():
     RBRACE = "BRACE"
     NEW_LINE = "NL"
     DOT = "DOT"
+    CONCATENATION = "CONCAT"
 
 SYNTAX = {
     "print": TOKEN_TYPE.PRINT,
@@ -27,6 +28,7 @@ CHARACTERS = {
     ";": TOKEN_TYPE.NEW_LINE,
     "(": TOKEN_TYPE.LBRACE,
     ")": TOKEN_TYPE.RBRACE,
+    ",": TOKEN_TYPE.CONCATENATION,
 
     "+": TOKEN_TYPE.ADDITION,
     "-": TOKEN_TYPE.SUBTRACTION,
@@ -95,8 +97,11 @@ class Lexxer():
         if Number.count(".") > 1:
             self.GeneratedTokens.append(Token(Number, TOKEN_TYPE.MISC))
             return
-        
-        self.GeneratedTokens.append(Token(float(Number), TOKEN_TYPE.NUMBER))
+        elif Number.count(".") == 1:
+            self.GeneratedTokens.append(Token(float(Number), TOKEN_TYPE.MISC))
+            return
+        else:
+            self.GeneratedTokens.append(Token(Number, TOKEN_TYPE.NUMBER))
 
     def LexicalAnalysis(self):
         self.AdvanceLine()

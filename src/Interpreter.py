@@ -33,7 +33,22 @@ class Interpreter():
 
         while len(expression) != 1:
             for Index, Token in enumerate(expression):
-                if Token.Type == Lexxer.TOKEN_TYPE.ADDITION:
+               
+                if Token.Type == Lexxer.TOKEN_TYPE.CONCATENATION:
+                    LeftSide = expression[Index - 1]
+                    RightSide = expression[Index + 1]
+
+                    if LeftSide.Type != RightSide.Type:
+                        self.ThrowError("Arithmetic on mismatched types!")
+
+                    EvaluatedValue = str(LeftSide.Value) + " " + str(RightSide.Value)
+
+                    expression[Index] = Lexxer.Token(EvaluatedValue, Lexxer.TOKEN_TYPE.STRING)
+
+                    expression.remove(LeftSide)
+                    expression.remove(RightSide)
+
+                elif Token.Type == Lexxer.TOKEN_TYPE.ADDITION:
                     LeftSide = expression[Index - 1]
                     RightSide = expression[Index + 1]
 
