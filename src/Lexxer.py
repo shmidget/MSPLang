@@ -114,8 +114,9 @@ class Lexxer():
 
         while self.CurrentLineIndex < len(self.FileContent):
             while self.CurrentCharacterIndex < len(self.CurrentLine):
+                print(self.CurrentCharacter)
                 if self.CurrentCharacter == " ": self.AdvanceCharacter()
-
+                
                 elif self.CurrentCharacter in CHARACTERS: 
                     self.CheckExtraCharacters()
                     self.GeneratedTokens.append(Token(self.CurrentCharacter, CHARACTERS[self.CurrentCharacter]))
@@ -137,10 +138,11 @@ class Lexxer():
 
                     self.AdvanceCharacter()
                     
+            print("Starting Newline")
             self.CheckExtraCharacters()
             self.ExtraCharacters = ""
-            self.GeneratedTokens.append(Token("", TOKEN_TYPE.NEW_LINE))
             self.AdvanceLine()
+            self.AdvanceCharacter()
 
         print("Now displaying all generated tokens:")
         for Tokens in self.GeneratedTokens:
